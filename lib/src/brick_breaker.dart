@@ -1,14 +1,20 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:breakout_game/src/components/ball.dart';
+import 'package:breakout_game/src/components/components.dart';
 import 'package:breakout_game/src/components/play_area.dart';
 import 'package:breakout_game/src/config.dart';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class BrickBreaker extends FlameGame with HasCollisionDetection {
+class BrickBreaker extends FlameGame
+    with HasCollisionDetection, KeyboardEvents {
   BrickBreaker()
     : super(
         camera: CameraComponent.withFixedResolution(
@@ -39,6 +45,29 @@ class BrickBreaker extends FlameGame with HasCollisionDetection {
       ),
     );
 
+    world.add(
+      Bat(
+        cornerRadius: const Radius.circular(ballRadius / 2),
+        position: Vector2(width / 2, height * 0.95),
+        size: Vector2(batWidht, batHeight),
+      ),
+    );
+
     debugMode = true;
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    super.onKeyEvent(event, keysPressed);
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.arrowLeft:
+        world.children.query<Bat>().first.moveBy(-batStep);
+      case LogicalKeyboardKey.arrowRight:
+        world.children.query<Bat>().first.moveBy(batStep);
+    }
+    return KeyEventResult.handled;
   }
 }
