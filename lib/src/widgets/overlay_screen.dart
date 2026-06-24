@@ -10,7 +10,7 @@ class OverlayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: const Alignment(0, -0.15),
+      alignment: Alignment.center,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -19,11 +19,19 @@ class OverlayScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineLarge,
           ).animate().slideY(duration: 750.ms, begin: -3, end: 0),
           const SizedBox(height: 16),
-          Text(subtitle, style: Theme.of(context).textTheme.headlineSmall)
-              .animate(onPlay: (controller) => controller.repeat())
-              .fadeIn(duration: 1.seconds)
-              .then()
-              .fadeOut(duration: 1.seconds),
+          SizedBox(
+            width: MediaQuery.widthOf(context),
+            child:
+                Text(
+                      subtitle,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      textAlign: TextAlign.center,
+                    )
+                    .animate(onPlay: (controller) => controller.repeat())
+                    .fadeIn(duration: 1.seconds)
+                    .then()
+                    .fadeOut(duration: 1.seconds),
+          ),
         ],
       ),
     );
